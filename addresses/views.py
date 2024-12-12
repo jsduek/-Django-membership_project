@@ -4,14 +4,20 @@ from rest_framework.exceptions import NotFound
 from rest_framework import status
 from .models import Address, User
 from .serializers import AddressSerializer
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 class AddressAll(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     def get(self, request):
         addresses = Address.objects.all()
         serializer = AddressSerializer(addresses, many=True)
         return Response(serializer.data)
 
 class AddressUsers(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     def get_object(self, address_id):  ## get_object 는 특정 객체를 조회하거나 가져오는데 사용되는 메소드 /
         try:
             return Address.objects.get(id=address_id)
